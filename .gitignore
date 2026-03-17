@@ -1,0 +1,16 @@
+.venv/
+.vscode/
+__pycache__/
+testing/out/
+*.pyc
+*.png
+static.txt
+dynamic.txt
+*.o
+*.out
+*.txt
+!to-do.txt
+*.csv
+output/
+bin/
+tp2

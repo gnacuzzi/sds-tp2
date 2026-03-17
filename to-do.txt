@@ -1,0 +1,9 @@
+0. Chequear si esta bien codeado el algoritmo
+    "Noise affects only the direction, not the speed magnitude." chequear esto que es algo que esta en nuestro algoritmo
+1. Medir observables
+2. Probar con distintos valores de eta (ruido)
+3. Hacer animacion en python
+4. Graficar Evolucion temporal en python
+5. Graficar Curvas en python
+6. Informe
+7. Presentacion

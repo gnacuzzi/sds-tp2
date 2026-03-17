@@ -1,1 +1,173 @@
-# sds-tp2
+# TP2 - Vicsek Model with Leaders
+
+## Description
+
+This project implements the off-lattice Vicsek model to simulate the collective behavior of self-propelled agents in two dimensions.
+
+The system consists of point particles moving with constant speed. At each time step, particles update their direction based on the average direction of their neighbors within an interaction radius, plus an angular noise component.
+
+Three scenarios are implemented:
+
+* **Case A:** no leader
+* **Case B:** fixed-direction leader
+* **Case C:** circular-motion leader
+
+The simulation is decoupled from visualization: the C program generates output files that can later be used (e.g., with Python) for animation and analysis.
+
+---
+
+## Model Parameters
+
+Default parameters:
+
+* System size: `L = 10`
+* Density: `ρ = 4`
+* Number of particles: `N = 400`
+* Interaction radius: `rc = 1`
+* Speed: `v = 0.03`
+* Time step: `dt = 1`
+* Noise: `η` (passed via command line)
+
+---
+
+## Algorithm
+
+At each time step:
+
+1. Neighbors are computed using the **Cell Index Method (CIM)**.
+2. Each particle updates its direction using:
+
+   * The angular average of its neighbors (including itself)
+   * Uniform noise in `[-η/2, η/2]`
+3. Velocity is updated (constant magnitude).
+4. Position is updated with periodic boundary conditions.
+5. The global order parameter is computed:
+
+[
+v_a = \frac{1}{N v} \left| \sum_i \vec{v_i} \right|
+]
+
+The update is **synchronous**.
+
+---
+
+## Implemented Cases
+
+### Case A: No leader
+
+All particles follow the standard Vicsek dynamics.
+
+---
+
+### Case B: Fixed-direction leader
+
+* One particle (id = 0) acts as a leader.
+* Maintains a constant direction.
+* Is not influenced by neighbors.
+* Influences all other particles.
+
+---
+
+### Case C: Circular leader
+
+* One particle follows a circular trajectory with radius `R = 5`.
+* Center at `(5, 5)`.
+* Tangential speed equal to the system speed.
+* Not influenced by neighbors.
+* Influences all other particles.
+
+---
+
+## Project Structure
+
+```
+tp2/
+├── src/
+│   ├── main.c
+│   ├── cim.c / cim.h
+│   ├── geometry.c / geometry.h
+│   ├── generator.c / generator.h
+│   ├── io.c / io.h
+│   ├── particle.c / particle.h
+├── bin/
+├── output/
+├── Makefile
+└── README.md
+```
+
+---
+
+## Compilation
+
+From the project root:
+
+```bash
+make
+```
+
+---
+
+## Execution
+
+The program takes two arguments:
+
+```bash
+./bin/tp2 <leader_mode> <eta>
+```
+
+### leader_mode:
+
+* `0` → no leader
+* `1` → fixed-direction leader
+* `2` → circular leader
+
+### eta:
+
+* angular noise (≥ 0)
+
+---
+
+### Examples
+
+```bash
+make run
+```
+
+```bash
+make run LEADER=1
+```
+
+```bash
+make run LEADER=2 ETA=1.0
+```
+
+---
+
+## Output Files
+
+Files are generated in the `output/` directory:
+
+### static.txt
+
+Contains system parameters:
+
+```
+N
+L
+rc
+v
+eta
+leader_mode
+```
+
+### dynamic.txt
+
+Contains time evolution:
+
+```
+t
+x y vx vy is_leader
+...
+```
+
+Repeated for each time step.
