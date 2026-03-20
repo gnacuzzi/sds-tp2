@@ -11,13 +11,13 @@
 #define DYNAMIC_FILE "output/dynamic.txt"
 
 #define L_DEFAULT       10.0
-#define RHO_DEFAULT      4.0
-#define RC_DEFAULT       1.0
-#define SPEED_DEFAULT    0.03
-#define DT_DEFAULT       1.0
-#define ETA_DEFAULT      0.0   
-#define STEPS_DEFAULT  300
-#define OUTPUT_EVERY     1
+#define RHO_DEFAULT     4.0
+#define RC_DEFAULT      1.0
+#define SPEED_DEFAULT   0.03
+#define DT_DEFAULT      1.0
+#define ETA_DEFAULT     0.0   
+#define STEPS_DEFAULT   2000
+#define OUTPUT_EVERY    1
 /* N = rho * L^2 = 4 * 10^2 = 400 */
 #define N_DEFAULT ((int)(RHO_DEFAULT * L_DEFAULT * L_DEFAULT))
 
@@ -113,13 +113,18 @@ static void update_particles_no_leader(
         double sum_cos = cos(particles[i].angle);
         double sum_sin = sin(particles[i].angle);
 
-        for (int k = 0; k < neighbor_count[i]; k++) {
+        int particle_neighbors_count = neighbor_count[i];
+
+        for (int k = 0; k < particle_neighbors_count; k++) {
             int j = neighbors[i][k];
             sum_cos += cos(particles[j].angle);
             sum_sin += sin(particles[j].angle);
         }
 
-        double avg_angle = atan2(sum_sin, sum_cos);
+        double avg_angle = atan2(
+            sum_sin / (particle_neighbors_count + 1),
+            sum_cos / (particle_neighbors_count + 1)
+        );
         double noise = random_uniform(-eta / 2.0, eta / 2.0);
         double new_angle = avg_angle + noise;
 
@@ -162,13 +167,19 @@ static void update_particles_fixed_leader(
         double sum_cos = cos(particles[i].angle);
         double sum_sin = sin(particles[i].angle);
 
-        for (int k = 0; k < neighbor_count[i]; k++) {
+        int particle_neighbors_count = neighbor_count[i];
+
+        for (int k = 0; k < particle_neighbors_count; k++) {
             int j = neighbors[i][k];
             sum_cos += cos(particles[j].angle);
             sum_sin += sin(particles[j].angle);
         }
 
-        double avg_angle = atan2(sum_sin, sum_cos);
+        double avg_angle = atan2(
+            sum_sin / (particle_neighbors_count + 1),
+            sum_cos / (particle_neighbors_count + 1)
+        );
+
         double noise = random_uniform(-eta / 2.0, eta / 2.0);
         double new_angle = avg_angle + noise;
 
@@ -221,13 +232,18 @@ static void update_particles_circular_leader(
         double sum_cos = cos(particles[i].angle);
         double sum_sin = sin(particles[i].angle);
 
-        for (int k = 0; k < neighbor_count[i]; k++) {
+        int particle_neighbors_count = neighbor_count[i];
+
+        for (int k = 0; k < particle_neighbors_count; k++) {
             int j = neighbors[i][k];
             sum_cos += cos(particles[j].angle);
             sum_sin += sin(particles[j].angle);
         }
 
-        double avg_angle = atan2(sum_sin, sum_cos);
+        double avg_angle = atan2(
+            sum_sin / (particle_neighbors_count + 1),
+            sum_cos / (particle_neighbors_count + 1)
+        );
         double noise = random_uniform(-eta / 2.0, eta / 2.0);
         double new_angle = avg_angle + noise;
 
