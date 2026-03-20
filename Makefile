@@ -28,8 +28,9 @@ $(TARGET): $(OBJS)
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-run: all
+run: clean all 
 	./$(TARGET) $(LEADER) $(ETA)
 
 clean:
 	rm -rf $(BIN_DIR)
+	rm -rf $(OUTPUT_DIR)

@@ -54,3 +54,16 @@ void append_dynamic_frame(const char *filename, Particle *particles, int n, doub
 
     fclose(file);
 }
+
+void append_va_value(const char * filename, double va, double t) {
+    FILE *file = fopen(filename, "a");
+
+    if (file == NULL) {
+        fprintf(stderr, "Error opening dynamic file %s\n", filename);
+        return;
+    }
+
+    fprintf(file, "%.6f %.6f\n", t, va);
+
+    fclose(file);
+}

@@ -9,6 +9,7 @@
 
 #define STATIC_FILE  "output/static.txt"
 #define DYNAMIC_FILE "output/dynamic.txt"
+#define VA_FILE      "output/va.txt"
 
 #define L_DEFAULT       10.0
 #define RHO_DEFAULT     4.0
@@ -16,8 +17,9 @@
 #define SPEED_DEFAULT   0.03
 #define DT_DEFAULT      1.0
 #define ETA_DEFAULT     0.0   
-#define STEPS_DEFAULT   10000
+#define STEPS_DEFAULT   5000
 #define OUTPUT_EVERY    1
+#define VA_EVERY    10
 /* N = rho * L^2 = 4 * 10^2 = 400 */
 #define N_DEFAULT ((int)(RHO_DEFAULT * L_DEFAULT * L_DEFAULT))
 
@@ -406,8 +408,9 @@ int main(int argc, char *argv[]) {
             append_dynamic_frame(DYNAMIC_FILE, particles, n, step * dt);
         }
 
-        if (step % 50 == 0 || step == 1 || step == steps) {
+        if (step % VA_EVERY == 0 || step == 1 || step == steps) {
             double va = compute_order_parameter(particles, n, speed);
+            append_va_value(VA_FILE, va, step * dt);
             printf("step=%d  t=%.2f  va=%.6f\n", step, step * dt, va);
         }
     }
