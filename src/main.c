@@ -17,7 +17,7 @@
 #define SPEED_DEFAULT   0.03
 #define DT_DEFAULT      1.0
 #define ETA_DEFAULT     0.0   
-#define STEPS_DEFAULT   5000
+#define STEPS_DEFAULT   2000
 #define OUTPUT_EVERY    1
 #define VA_EVERY    1
 /* N = rho * L^2 = 4 * 10^2 = 400 */

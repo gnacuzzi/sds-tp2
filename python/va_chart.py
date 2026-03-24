@@ -23,7 +23,7 @@ nombre_salida = sys.argv[1]
 # =========================
 # Parámetros fijos
 # =========================
-X = 0          # desde dónde calcular promedio y desvío
+X = 200          # desde dónde calcular promedio y desvío
 STEP_X = 200   # separación fija de ticks en eje X
 
 # =========================
