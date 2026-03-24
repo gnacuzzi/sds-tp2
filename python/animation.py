@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation, PillowWriter
+from matplotlib.animation import FuncAnimation, FFMpegWriter
 from matplotlib.patches import Circle
+from itertools import product
 import argparse
 
 
@@ -46,15 +47,26 @@ def read_dynamic(path, N):
 
     return frames
 
+def periodic_circle_centers(x, y, L, rc):
+    centers = []
+    for dx, dy in product((-L, 0, L), repeat=2):
+        cx = x + dx
+        cy = y + dy
+        if -rc <= cx <= L + rc and -rc <= cy <= L + rc:
+            centers.append((cx, cy))
+    return centers
+
 
 def animate(static_path, dynamic_path, interval=60, save_gif=None, show_rc=False):
     N, L, rc, v, eta, leader_mode = read_static(static_path)
     frames = read_dynamic(dynamic_path, N)
 
-    fig, ax = plt.subplots(figsize=(8, 8))
+    fig, ax = plt.subplots(figsize=(10, 6))
     ax.set_xlim(0, L)
     ax.set_ylim(0, L)
     ax.set_aspect("equal")
+    ax.set_box_aspect(1)
+    ax.set_position([0.22, 0.12, 0.56, 0.78])
     ax.set_xlabel("x")
     ax.set_ylabel("y")
 
@@ -106,18 +118,22 @@ def animate(static_path, dynamic_path, interval=60, save_gif=None, show_rc=False
         pivot="middle"
     )
 
+    leader_circles = []
     if leader_x.size > 0:
-        leader_circle = Circle(
-            (leader_x[0], leader_y[0]),
-            rc,
-            fill=False,
-            edgecolor="black",
-            linewidth=1.2,
-            alpha=0.9,
-            zorder=2
-        )
+        for cx, cy in periodic_circle_centers(leader_x[0], leader_y[0], L, rc):
+            circle = Circle(
+                (cx, cy),
+                rc,
+                fill=False,
+                edgecolor="black",
+                linewidth=1.2,
+                alpha=0.9,
+                zorder=2
+            )
+            ax.add_patch(circle)
+            leader_circles.append(circle)
     else:
-        leader_circle = Circle(
+        circle = Circle(
             (0.0, 0.0),
             rc,
             fill=False,
@@ -126,8 +142,8 @@ def animate(static_path, dynamic_path, interval=60, save_gif=None, show_rc=False
             alpha=0.0,
             zorder=2
         )
-
-    ax.add_patch(leader_circle)
+        ax.add_patch(circle)
+        leader_circles.append(circle)
 
     # Círculos rc para todas las partículas (modo debug)
     rc_circles = []
@@ -148,8 +164,6 @@ def animate(static_path, dynamic_path, interval=60, save_gif=None, show_rc=False
             )
             ax.add_patch(circle)
             rc_circles.append(circle)
-
-    title = ax.set_title(f"t = {t0:.2f} | eta = {eta:.2f} | leader_mode = {leader_mode}")
 
     def update(frame):
         t, data = frame
@@ -180,13 +194,22 @@ def animate(static_path, dynamic_path, interval=60, save_gif=None, show_rc=False
         if leader_x.size > 0:
             leader_quiver.set_offsets(np.column_stack((leader_x, leader_y)))
             leader_quiver.set_UVC(leader_vx, leader_vy)
-            leader_circle.center = (leader_x[0], leader_y[0])
-            leader_circle.set_radius(rc)
-            leader_circle.set_alpha(0.9)
+
+            centers = periodic_circle_centers(leader_x[0], leader_y[0], L, rc)
+            for idx, circle in enumerate(leader_circles):
+                if idx < len(centers):
+                    circle.center = centers[idx]
+                    circle.set_radius(rc)
+                    circle.set_alpha(0.9)
+                else:
+                    circle.center = (0.0, 0.0)
+                    circle.set_alpha(0.0)
         else:
             leader_quiver.set_offsets(np.empty((0, 2)))
             leader_quiver.set_UVC(np.array([]), np.array([]))
-            leader_circle.set_alpha(0.0)
+            for circle in leader_circles:
+                circle.center = (0.0, 0.0)
+                circle.set_alpha(0.0)
 
         if show_rc:
             for i, circle in enumerate(rc_circles):
@@ -200,9 +223,8 @@ def animate(static_path, dynamic_path, interval=60, save_gif=None, show_rc=False
                     circle.set_alpha(0.18)
                     circle.set_linewidth(0.6)
 
-        title.set_text(f"t = {t:.2f} | eta = {eta:.2f} | leader_mode = {leader_mode}")
-
-        artists = [followers_quiver, leader_quiver, leader_circle, title]
+        artists = [followers_quiver, leader_quiver]
+        artists.extend(leader_circles)
         if show_rc:
             artists.extend(rc_circles)
         return artists
@@ -216,9 +238,9 @@ def animate(static_path, dynamic_path, interval=60, save_gif=None, show_rc=False
     )
 
     if save_gif is not None:
-        writer = PillowWriter(fps=max(1, int(1000 / interval)))
+        writer = FFMpegWriter(fps=max(1, int(1000 / interval)))
         anim.save(save_gif, writer=writer)
-        print(f"GIF saved to: {save_gif}")
+        plt.close(fig)
     else:
         plt.show()
 

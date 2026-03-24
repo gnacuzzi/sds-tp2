@@ -14,7 +14,7 @@ OBJS = $(patsubst $(SRC_DIR)/%.c,$(BIN_DIR)/%.o,$(SRCS))
 LEADER ?= 0
 ETA ?= 0.0
 
-.PHONY: all run clean dirs
+.PHONY: all run rebuild clean dirs
 
 all: dirs $(TARGET)
 
@@ -28,9 +28,11 @@ $(TARGET): $(OBJS)
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-run: clean all 
+run: all
+	./$(TARGET) $(LEADER) $(ETA)
+
+rebuild: clean all
 	./$(TARGET) $(LEADER) $(ETA)
 
 clean:
 	rm -rf $(BIN_DIR)
-	rm -rf $(OUTPUT_DIR)

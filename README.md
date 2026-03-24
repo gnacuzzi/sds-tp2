@@ -164,7 +164,7 @@ The animation represents each particle as a vector (velocity), whose origin is l
 From the project root:
 
 ```bash
-python3 python/animate_vicsek.py
+python3 python/animation.py
 ```
 
 ---
@@ -174,7 +174,7 @@ python3 python/animate_vicsek.py
 #### Change animation speed
 
 ```bash
-python3 python/animate_vicsek.py --interval 40
+python3 python/animation.py --interval 40
 ```
 
 ---
@@ -182,7 +182,7 @@ python3 python/animate_vicsek.py --interval 40
 #### Save animation as GIF
 
 ```bash
-python3 python/animate_vicsek.py --save-gif output/animation.gif
+python3 python/animation.py --save-gif output/animation.gif
 ```
 
 ---
@@ -190,7 +190,7 @@ python3 python/animate_vicsek.py --save-gif output/animation.gif
 #### Show interaction radius (debug mode)
 
 ```bash
-python3 python/animate_vicsek.py --show-rc
+python3 python/animation.py --show-rc
 ```
 
 ---
