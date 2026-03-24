@@ -69,6 +69,17 @@ print(f"Desvío estándar = {desvio}")
 os.makedirs("graphics", exist_ok=True)
 
 ruta_salida = os.path.join("graphics", f"{nombre_salida}.png")
+ruta_txt = os.path.join("graphics", f"{nombre_salida}.txt")
+
+# =========================
+# Guardar TXT
+# =========================
+with open(ruta_txt, "w") as f:
+    f.write(f"nombre_imagen: {nombre_salida}.png\n")
+    f.write(f"promedio: {promedio}\n")
+    f.write(f"desvio: {desvio}\n")
+
+print(f"Datos guardados en: {ruta_txt}")
 
 # =========================
 # Gráfico
