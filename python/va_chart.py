@@ -1,20 +1,37 @@
-import matplotlib.pyplot as plt
-from matplotlib.ticker import MultipleLocator
+import os
 import sys
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator
 
-# uso: python script.py X step
-if len(sys.argv) != 3:
-    print("Uso: python script.py <X> <step_ticks>")
+# =========================
+# Configuración tipográfica
+# =========================
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['mathtext.fontset'] = 'stix'
+plt.rcParams['axes.unicode_minus'] = False
+
+# =========================
+# Parámetro: nombre de salida
+# =========================
+if len(sys.argv) != 2:
+    print("Uso: python script.py <nombre_salida>")
     sys.exit(1)
 
-X = float(sys.argv[1])
-step = float(sys.argv[2])
+nombre_salida = sys.argv[1]
 
+# =========================
+# Parámetros fijos
+# =========================
+X = 0          # desde dónde calcular promedio y desvío
+STEP_X = 200   # separación fija de ticks en eje X
+
+# =========================
+# Lectura de datos
+# =========================
 x = []
 y = []
 
-# Leer archivo
 with open('output/va.txt', 'r') as f:
     for line in f:
         if line.strip():
@@ -22,7 +39,13 @@ with open('output/va.txt', 'r') as f:
             x.append(t)
             y.append(v)
 
-# Filtrar datos desde X
+if len(x) == 0:
+    print("El archivo output/va.txt está vacío o no contiene datos válidos.")
+    sys.exit(1)
+
+# =========================
+# Filtrado desde X
+# =========================
 x_filtrado = [t for t in x if t >= X]
 y_filtrado = [v for t, v in zip(x, y) if t >= X]
 
@@ -30,7 +53,9 @@ if len(y_filtrado) == 0:
     print(f"No hay datos para t >= {X}")
     sys.exit(1)
 
-# Calcular promedio y desvío desde X
+# =========================
+# Estadísticas
+# =========================
 promedio = np.mean(y_filtrado)
 desvio = np.std(y_filtrado)
 
@@ -38,37 +63,71 @@ print(f"Para t >= {X}:")
 print(f"Promedio = {promedio}")
 print(f"Desvío estándar = {desvio}")
 
-# Graficar datos
-plt.figure()
-plt.plot(x, y, marker='o', markersize=3, label='Datos')
+# =========================
+# Crear carpeta de salida
+# =========================
+os.makedirs("graphics", exist_ok=True)
 
-ax = plt.gca()
-ax.xaxis.set_major_locator(MultipleLocator(step))
+ruta_salida = os.path.join("graphics", f"{nombre_salida}.png")
 
-# Línea horizontal del promedio solo desde X
-plt.plot(
+# =========================
+# Gráfico
+# =========================
+fig, ax = plt.subplots(figsize=(10, 6))
+
+# Línea + puntos en todos los valores
+ax.plot(
+    x,
+    y,
+    linestyle='-',
+    linewidth=1.0,
+    marker='o',
+    markersize=3,
+    label=r'$v_a(t)$'
+)
+
+# Ticks del eje X cada 200
+ax.xaxis.set_major_locator(MultipleLocator(STEP_X))
+
+# Promedio
+ax.plot(
     [X, max(x_filtrado)],
     [promedio, promedio],
     linestyle='--',
-    label=f'Promedio = {promedio:.4f}'
+    linewidth=1.5,
+    label=rf'Promedio = {promedio:.4f}'
 )
 
-# Banda de desvío solo desde X
-plt.fill_between(
+# Banda de desvío
+ax.fill_between(
     x_filtrado,
     promedio - desvio,
     promedio + desvio,
     alpha=0.2,
-    label=f'± Desvío ({desvio:.4f})'
+    label=rf'$\sigma$ = {desvio:.4f}'
 )
 
-# Línea vertical para marcar X
-plt.axvline(X, linestyle=':', label=f'X = {X}')
+# Línea vertical en X
+ax.axvline(
+    X,
+    linestyle=':',
+    linewidth=1.2,
+    label=rf'$t = {X}$'
+)
 
-plt.xlabel('Tiempo')
-plt.ylabel('v_a')
-plt.title('v_a en función del tiempo')
+# Ejes y formato
+ax.set_xlim(min(x), max(x))
+ax.set_ylim(0, 1)
+ax.set_xlabel(r'Tiempo ($t$)')
+ax.set_ylabel(r'Polarización ($v_a$)')
+# ax.set_title(r'Indicador de ruido $v_a$ en función del tiempo $t$')
 
-plt.legend()
-plt.grid()
+ax.grid(True)
+ax.legend()
+fig.tight_layout()
+
+# Guardar como PNG
+fig.savefig(ruta_salida, dpi=300, bbox_inches='tight')
+print(f"Gráfico guardado en: {ruta_salida}")
+
 plt.show()
