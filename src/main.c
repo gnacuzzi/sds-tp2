@@ -19,7 +19,7 @@
 #define ETA_DEFAULT     0.0   
 #define STEPS_DEFAULT   5000
 #define OUTPUT_EVERY    1
-#define VA_EVERY    10
+#define VA_EVERY    1
 /* N = rho * L^2 = 4 * 10^2 = 400 */
 #define N_DEFAULT ((int)(RHO_DEFAULT * L_DEFAULT * L_DEFAULT))
 
