@@ -140,7 +140,7 @@ ax.yaxis.set_major_locator(MultipleLocator(STEP_Y))
 
 # ejes
 ax.set_xlim(0, max(t))
-ax.set_ylim(-1.05, 1.05)
+ax.set_ylim(-1.01, 1.01)
 
 ax.set_xlabel(r'Tiempo ($t$)')
 ax.set_ylabel(r'Correlación $C(t)$')
