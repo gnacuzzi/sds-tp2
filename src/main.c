@@ -19,7 +19,7 @@
 #define SPEED_DEFAULT 0.03
 #define DT_DEFAULT 1.0
 #define ETA_DEFAULT 0.0
-#define STEPS_DEFAULT 2000
+#define STEPS_DEFAULT 5000
 #define OUTPUT_EVERY 1
 #define VA_EVERY 1
 /* N = rho * L^2 = 4 * 10^2 = 400 */
@@ -347,8 +347,8 @@ int main(int argc, char *argv[]) {
     clear_dynamic_file(DYNAMIC_CORRELATION_FILE);
     clear_dynamic_file(DYNAMIC_MEAN_ANGLE_FILE);
     append_dynamic_frame(DYNAMIC_FILE, particles, n, 0.0);
-    append_correlation_frame(DYNAMIC_CORRELATION_FILE, 0.0, 0.0);
-    append_mean_angle_frame(DYNAMIC_MEAN_ANGLE_FILE, 0.0, 0.0);
+    // append_correlation_frame(DYNAMIC_CORRELATION_FILE, 0.0, 0.0);
+    // append_mean_angle_frame(DYNAMIC_MEAN_ANGLE_FILE, 0.0, 0.0);
 
     for (int step = 1; step <= steps; step++) {
         cim_neighbors(particles, n, L, M, rc, neighbors, neighbor_count);
