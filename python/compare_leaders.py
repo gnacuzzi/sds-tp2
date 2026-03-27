@@ -10,6 +10,10 @@ from matplotlib.ticker import MultipleLocator
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['font.size'] = 12
+plt.rcParams['axes.labelsize'] = 12
+plt.rcParams['xtick.labelsize'] = 12
+plt.rcParams['ytick.labelsize'] = 12
 
 # =========================
 # Carpetas de entrada
@@ -119,7 +123,7 @@ def main():
             fmt='o',
             markersize=4,
             capsize=3,
-            linestyle='none',
+            linestyle='-',
             zorder=3,
             label=nombre_serie
         )
@@ -133,8 +137,8 @@ def main():
     ax.set_ylabel(r'Polarización promedio ($v_a$)')
     # ax.set_title(r'Polarización promedio en función del ruido')
 
-    ax.grid(False, zorder=0)
-    ax.legend()
+    # ax.grid(False, zorder=0)
+    # ax.legend()
     fig.tight_layout()
 
     fig.savefig(OUTPUT_FILE, dpi=300, bbox_inches='tight')
