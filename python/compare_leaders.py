@@ -10,10 +10,6 @@ from matplotlib.ticker import MultipleLocator
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['axes.unicode_minus'] = False
-plt.rcParams['font.size'] = 12
-plt.rcParams['axes.labelsize'] = 12
-plt.rcParams['xtick.labelsize'] = 12
-plt.rcParams['ytick.labelsize'] = 12
 
 # =========================
 # Carpetas de entrada
@@ -22,8 +18,8 @@ BASE_DIR = "graphics"
 
 CARPETAS = {
     "Sin líder": os.path.join(BASE_DIR, "sin_lider"),
-    "Líder 1": os.path.join(BASE_DIR, "leader1"),
-    "Líder 2": os.path.join(BASE_DIR, "leader2"),
+    "Líder fijo": os.path.join(BASE_DIR, "leader1"),
+    "Líder circular": os.path.join(BASE_DIR, "leader2"),
 }
 
 OUTPUT_FILE = os.path.join(BASE_DIR, "comparacion_lideres.png")
@@ -123,7 +119,7 @@ def main():
             fmt='o',
             markersize=4,
             capsize=3,
-            linestyle='-',
+            linestyle='none',
             zorder=3,
             label=nombre_serie
         )
@@ -137,8 +133,8 @@ def main():
     ax.set_ylabel(r'Polarización promedio ($v_a$)')
     # ax.set_title(r'Polarización promedio en función del ruido')
 
-    # ax.grid(False, zorder=0)
-    # ax.legend()
+    ax.grid(False, zorder=0)
+    ax.legend()
     fig.tight_layout()
 
     fig.savefig(OUTPUT_FILE, dpi=300, bbox_inches='tight')
