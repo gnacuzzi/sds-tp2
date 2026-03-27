@@ -10,6 +10,10 @@ from matplotlib.ticker import MultipleLocator
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['font.size'] = 12
+plt.rcParams['axes.labelsize'] = 12
+plt.rcParams['xtick.labelsize'] = 12
+plt.rcParams['ytick.labelsize'] = 12
 
 GRAPHICS_DIR = "graphics"
 OUTPUT_FILE = os.path.join(GRAPHICS_DIR, "va_vs_ruido_toma_1.png")
@@ -106,9 +110,8 @@ def main():
         fmt='o',
         markersize=5,
         capsize=4,
-        linestyle='none',
+        linestyle='-',
         zorder=3,
-        label=r'Promedio de $v_a$ con barras de error'
     )
 
     ax.set_xlim(0, 5)
@@ -118,14 +121,12 @@ def main():
     ax.set_ylabel(r'Polarización promedio ($v_a$)')
     # ax.set_title(r'Polarización promedio en función del ruido')
 
-    ax.grid(False, zorder=0)
-    ax.legend()
     fig.tight_layout()
 
     fig.savefig(OUTPUT_FILE, dpi=300, bbox_inches='tight')
     print(f"Gráfico guardado en: {OUTPUT_FILE}")
 
-    plt.show()
+    # plt.show()
 
 
 if __name__ == "__main__":
