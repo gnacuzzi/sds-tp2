@@ -138,7 +138,7 @@ def main():
     # ax.set_title(r'Polarización promedio en función del ruido')
 
     # ax.grid(False, zorder=0)
-    # ax.legend()
+    ax.legend()
     fig.tight_layout()
 
     fig.savefig(OUTPUT_FILE, dpi=300, bbox_inches='tight')
