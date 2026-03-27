@@ -118,7 +118,7 @@ def main():
     ax.set_ylabel(r'Polarización promedio ($v_a$)')
     # ax.set_title(r'Polarización promedio en función del ruido')
 
-    ax.grid(True, zorder=0)
+    ax.grid(False, zorder=0)
     ax.legend()
     fig.tight_layout()
 

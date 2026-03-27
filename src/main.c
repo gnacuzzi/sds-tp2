@@ -19,7 +19,7 @@
 #define SPEED_DEFAULT 0.03
 #define DT_DEFAULT 1.0
 #define ETA_DEFAULT 0.0
-#define STEPS_DEFAULT 5000
+#define STEPS_DEFAULT 2000
 #define OUTPUT_EVERY 1
 #define VA_EVERY 1
 /* N = rho * L^2 = 4 * 10^2 = 400 */
@@ -344,6 +344,7 @@ int main(int argc, char *argv[]) {
 
     write_static_file(STATIC_FILE, n, L, rc, speed, eta, leader_mode);
     clear_dynamic_file(DYNAMIC_FILE);
+    clear_dynamic_file(VA_FILE);
     clear_dynamic_file(DYNAMIC_CORRELATION_FILE);
     clear_dynamic_file(DYNAMIC_MEAN_ANGLE_FILE);
     append_dynamic_frame(DYNAMIC_FILE, particles, n, 0.0);

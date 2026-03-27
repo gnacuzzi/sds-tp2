@@ -68,7 +68,7 @@ ax.set_ylim(-180, 180)
 ax.set_xlabel(r'Tiempo ($t$)')
 ax.set_ylabel(r'Ángulo medio $\theta_s(t)$ [$^\circ$]')
 
-ax.grid(True)
+ax.grid(False)
 ax.legend()
 fig.tight_layout()
 
