@@ -34,11 +34,14 @@ PATRON_IMAGEN = re.compile(r"^ruido_(\d+(?:\.\d+)?)_toma_1\.png$")
 def parse_txt_file(filepath):
     """
     Lee archivos con formato:
-    nombre_imagen: ruido_4.2_toma_1.png
-    promedio: 0.157046405330372
-    desvio: 0.069702811680646
+    leader 1
+    eta 0
+    x_desde 200
+    promedio 0.996608791227096
+    desvio 0.004390879999646369
     """
-    nombre_imagen = None
+
+    ruido = None
     promedio = None
     desvio = None
 
@@ -46,23 +49,18 @@ def parse_txt_file(filepath):
         for line in f:
             line = line.strip()
 
-            if line.startswith("nombre_imagen:"):
-                nombre_imagen = line.split(":", 1)[1].strip()
+            if line.startswith("eta"):
+                # ejemplo: "eta 0"
+                ruido = float(line.split()[1])
 
-            elif line.startswith("promedio:"):
-                promedio = float(line.split(":", 1)[1].strip())
+            elif line.startswith("promedio"):
+                promedio = float(line.split()[1])
 
-            elif line.startswith("desvio:"):
-                desvio = float(line.split(":", 1)[1].strip())
+            elif line.startswith("desvio"):
+                desvio = float(line.split()[1])
 
-    if nombre_imagen is None or promedio is None or desvio is None:
+    if ruido is None or promedio is None or desvio is None:
         return None
-
-    match = PATRON_IMAGEN.match(nombre_imagen)
-    if not match:
-        return None
-
-    ruido = float(match.group(1))
 
     return {
         "ruido": ruido,

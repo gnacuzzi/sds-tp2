@@ -48,8 +48,8 @@ leader_dir = os.path.join("graphics", LEADER_DIRS[leader])
 os.makedirs(leader_dir, exist_ok=True)
 
 nombre_base = os.path.splitext(os.path.basename(input_path))[0]
-ruta_salida = os.path.join(leader_dir, f"{nombre_base}.png")
-ruta_resumen = os.path.join(leader_dir, f"{nombre_base}_stats.txt")
+ruta_salida = os.path.join(leader_dir, f"{nombre_base}(t)_ruido_{eta}.png")
+ruta_resumen = os.path.join(leader_dir, f"{nombre_base}(t)_ruido_{eta}_stats.txt")
 
 # =========================
 # Validación de archivo
