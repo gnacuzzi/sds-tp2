@@ -10,6 +10,10 @@ void clear_dynamic_file(const char *filename);
 
 void append_dynamic_frame(const char *filename, Particle *particles, int n, double t);
 
+void append_correlation_frame(const char *filename, double c, double t);
+
+void append_mean_angle_frame(const char *filename, double a, double t);
+
 void append_va_value(const char * filename, double va, double t);
 
 #endif
