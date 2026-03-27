@@ -10,15 +10,20 @@ from matplotlib.ticker import MultipleLocator
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['font.size'] = 12
+plt.rcParams['axes.labelsize'] = 12
+plt.rcParams['xtick.labelsize'] = 12
+plt.rcParams['ytick.labelsize'] = 12
 
 # =========================
 # Parámetro: nombre de salida
 # =========================
-if len(sys.argv) != 2:
-    print("Uso: python correlation.py <nombre_salida>")
+if len(sys.argv) != 3:
+    print("Uso: python correlation.py <nombre_salida> <leader>")
     sys.exit(1)
 
 nombre_salida = sys.argv[1]
+leader = sys.argv[2]
 
 # =========================
 # Configuración
@@ -61,30 +66,34 @@ if len(c_filtrado) == 0:
 # =========================
 # Estadísticas
 # =========================
-promedio = np.mean(c_filtrado)
-desvio = np.std(c_filtrado)
+# promedio = np.mean(c_filtrado)
+# desvio = np.std(c_filtrado)
 
-print(f"Para t >= {X}:")
-print(f"Promedio = {promedio}")
-print(f"Desvío estándar = {desvio}")
+# print(f"Para t >= {X}:")
+# print(f"Promedio = {promedio}")
+# print(f"Desvío estándar = {desvio}")
 
 # =========================
 # Crear carpeta de salida
 # =========================
-os.makedirs("graphics", exist_ok=True)
+if leader == 0:
+    dir = f"graphics/sin_lider/correlation"
+else:
+    dir = f"graphics/leader{leader}/correlation"
+os.makedirs(dir, exist_ok=True)
 
-ruta_png = os.path.join("graphics/leader2/correlation", f"{nombre_salida}.png")
-ruta_txt = os.path.join("graphics/leader2/correlation", f"{nombre_salida}.txt")
+ruta_png = os.path.join(dir, f"{nombre_salida}.png")
+# ruta_txt = os.path.join(f"graphics/leader{leader}/correlation", f"{nombre_salida}.txt")
 
 # =========================
 # Guardar TXT
 # =========================
-with open(ruta_txt, "w") as f:
-    f.write(f"nombre_imagen: {nombre_salida}.png\n")
-    f.write(f"promedio: {promedio}\n")
-    f.write(f"desvio: {desvio}\n")
+# with open(ruta_txt, "w") as f:
+#     f.write(f"nombre_imagen: {nombre_salida}.png\n")
+#     f.write(f"promedio: {promedio}\n")
+#     f.write(f"desvio: {desvio}\n")
 
-print(f"Datos guardados en: {ruta_txt}")
+# print(f"Datos guardados en: {ruta_txt}")
 
 # =========================
 # Gráfico
@@ -100,22 +109,22 @@ ax.scatter(
 )
 
 # línea de promedio
-ax.plot(
-    [X, max(t_filtrado)],
-    [promedio, promedio],
-    linestyle='--',
-    linewidth=1.5,
-    label=rf'Promedio = {promedio:.4f}'
-)
+# ax.plot(
+#     [X, max(t_filtrado)],
+#     [promedio, promedio],
+#     linestyle='--',
+#     linewidth=1.5,
+#     label=rf'Promedio = {promedio:.4f}'
+# )
 
 # banda de desvío
-ax.fill_between(
-    t_filtrado,
-    promedio - desvio,
-    promedio + desvio,
-    alpha=0.2,
-    label=rf'$\sigma$ = {desvio:.4f}'
-)
+# ax.fill_between(
+#     t_filtrado,
+#     promedio - desvio,
+#     promedio + desvio,
+#     alpha=0.2,
+#     label=rf'$\sigma$ = {desvio:.4f}'
+# )
 
 # línea vertical en X
 ax.axvline(
@@ -130,14 +139,14 @@ ax.xaxis.set_major_locator(MultipleLocator(STEP_X))
 ax.yaxis.set_major_locator(MultipleLocator(STEP_Y))
 
 # ejes
-ax.set_xlim(min(t), max(t))
+ax.set_xlim(0, max(t))
 ax.set_ylim(-1.05, 1.05)
 
 ax.set_xlabel(r'Tiempo ($t$)')
 ax.set_ylabel(r'Correlación $C(t)$')
 
-ax.grid(False)
-ax.legend()
+# ax.grid(False)
+# ax.legend()
 fig.tight_layout()
 
 # =========================

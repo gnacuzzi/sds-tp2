@@ -11,6 +11,7 @@ do
     echo ">>> Ejecutando ETA=$eta_fmt"
 
     make run LEADER=$LEADER ETA=$eta_fmt && \
-    python3 python/va_chart.py output/va.txt $LEADER $eta_fmt
+    python3 python/va_chart.py output/va.txt $LEADER $eta_fmt && \
+    python3 python/correlation.py c_t_ruido_$eta_fmt $LEADER
 
 done
