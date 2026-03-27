@@ -76,7 +76,7 @@ if len(c_filtrado) == 0:
 # =========================
 # Crear carpeta de salida
 # =========================
-if leader == 0:
+if leader == 0 or leader == '0':
     dir = f"graphics/sin_lider/correlation"
 else:
     dir = f"graphics/leader{leader}/correlation"
