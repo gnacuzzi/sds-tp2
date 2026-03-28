@@ -10,10 +10,11 @@ from matplotlib.ticker import MultipleLocator
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['axes.unicode_minus'] = False
-plt.rcParams['font.size'] = 12
-plt.rcParams['axes.labelsize'] = 12
-plt.rcParams['xtick.labelsize'] = 12
-plt.rcParams['ytick.labelsize'] = 12
+plt.rcParams['font.size'] = 24
+plt.rcParams['axes.labelsize'] = 24
+plt.rcParams['xtick.labelsize'] = 24
+plt.rcParams['ytick.labelsize'] = 24
+plt.rcParams['legend.fontsize'] = 18
 
 # =========================
 # Parámetro: nombre de salida
